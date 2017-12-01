@@ -1,0 +1,26 @@
+
+Suggested keywords based on category for new offer.  
+ - This could be a list of keywords already found for offers in that category plus some static
+  - //db."collection".distinct("arrayName") gets all distinct values from the array for ALL documents in collection
+ - That way we have a more stable list on which to match
+
+When matching
+ - Match on category first
+ - Then match on keywords
+
+Preferences page
+ - Choose categories
+ - Choose suggested keywords
+ - Allow adding of own keywords
+ 
+ 
+Offers need a location field. Preference for a consumer will be near zip code. 
+Right now we can use the Merchant account zip code
+
+When an offer is created, its assumed its live immediately, there is no start date right now
+ - matching will need to happen as the same time as offer creation
+ - emails need to be sent to any user who has a matching category & at least 1 keyword?? (threshold)
+
+When My Offers page is loaded, automatic check performed for anything mathing. 
+ - "Badge" showing number of matched offers on tab?
+ - "remove" an offer, because it doesn't interest the user (can we learn preferences from this?)

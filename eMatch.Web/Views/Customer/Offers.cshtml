@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "My Offers";
+}
+<h2>My Profile</h2>
+<br />
+<div class="tab-disappear">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#">My Offers <span class="badge" id="badge-offercount"></span></a></li>
+        <li><a href="~/Customer/Preferences">My Preferences</a></li>
+        <li><a href="~/Customer/Watch">Watchlist</a></li>
+        <li><a href="~/Customer/Profile">My Account</a></li>
+    </ul>
+</div>
+<div class="nav-disappear ">
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> Navigation</a>
+            <ul class="dropdown-menu">
+                <li class="active"><a href="#">My Offers <span class="badge" id="badge-offercount"></span></a></li>
+                <li><a href="~/Customer/Preferences">My Preferences</a></li>
+                <li><a href="~/Customer/Watch">Watchlist</a></li>
+                <li><a href="~/Customer/Profile">My Account</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<br />
+<div class="panel panel-default">
+    <div class="panel-body">
+        <span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp; See below for your matched offers!
+    </div>
+</div>
+<div id="newmatchdiv" class="hidden">
+    <br />
+   <i class="fa fa-flag"></i> <a href="/Customer/Offers" id="newmatch-link">You have new matches, click here to show them!</a> <i class="fa fa-flag"></i>
+</div>
+<br />
+<div id="match-div">
+    @{
+        foreach (KeyValuePair<string, List<eMatch.Engine.Enitities.Offers.Offer>> match in Model.MatchingOffers)
+        {
+            if (match.Value.Count > 0)
+            {
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-money"></i> @match.Key</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped table-bordered">
+                                @{foreach (eMatch.Engine.Enitities.Offers.Offer offer in match.Value)
+                                {
+                                    <tr>
+                                        <td>@offer.Name</td>
+                                        <td>@offer.Description</td>
+                                        <td style="width: 32px"><button class="btn btn-success">Get it!</button></td>
+                                        <td style="width: 32px"><i class="fa fa-star"></i></td>
+                                    </tr>
+                                }
+                                }
+                            </table>
+                            <ul class="pagination pull-right" style="margin: 0">
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-folder"></i> @match.Key</h3>
+                        </div>
+                        <div class="panel-body">
+                            Sorry, you currently have no matching offers for @match.Key.  Update your preferences for a better offer experience.
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>
+
+@*<script id="match-template" type="text/x-handlebars-template">
+    {{#each match}}    
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-money"></i> {{match.Key}}</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-bordered">
+                    {{#with match.Value}}
+                    {{#each offer}}
+                    <tr>
+                        <td>{{Name}}</td>
+                        <td>{{Description}}</td>
+                        <td style="width: 32px"><button class="btn btn-success">Get it!</button></td>
+                        <td style="width: 32px"><i class="fa fa-star"></i></td>
+                    </tr>
+                    {{/each}}
+                    {{/with}}
+                </table>
+                <ul class="pagination pull-right" style="margin: 0">
+                    <li><a href="#">&laquo;</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">&raquo;</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {{else}}
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-folder"></i> {{match.Key}}</h3>
+            </div>
+            <div class="panel-body">
+                Sorry, you currently have no matching offers for {{match.Key}}.  Update your preferences for a better offer experience.
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>*@

@@ -1,0 +1,157 @@
+﻿@using eMatch.Engine.Enitities.Users
+
+
+@{
+    ViewBag.Title = "My Account";
+}
+
+<h2>My Profile</h2>
+<br />
+<div class="tab-disappear">
+    <ul class="nav nav-tabs">
+        <li><a href="~/Customer/Offers">My Offers <span class="badge" id="badge-offercount"></span></a></li>
+        <li><a href="~/Customer/Preferences">My Preferences</a></li>
+        <li><a href="~/Customer/Watch">Watchlist</a></li>
+        <li class="active"><a href="">My Account</a></li>
+    </ul>
+</div>
+<div class="nav-disappear">
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> Navigation</a>
+            <ul class="dropdown-menu">
+                <li><a href="~/Customer/Offers">My Offers <span class="badge" id="badge-offercount"></span></a></li>
+                <li><a href="~/Customer/Preferences">My Preferences</a></li>
+                <li><a href="~/Customer/Watch">Watchlist</a></li>
+                <li class="active"><a href="">My Account</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<br />
+<div class="panel panel-default">
+    <div class="panel-body">
+        <span class="glyphicon glyphicon-info-sign"></span>&nbsp; Keep your account up to date!
+    </div>
+</div>
+<br />
+<form class="form" role="form" method="post" action="~/Customer/UpdateProfile">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Account Details</h4>
+            <hr />
+            <input type="text" class="form-control" name="firstname" placeholder="First Name" value="@Model.User.FirstName">
+            <input type="text" class="form-control" name="lastname" placeholder="Last Name" value="@Model.User.LastName">
+            <input type="email" class="form-control" name="email" placeholder="Email address*" required value="@Model.User.Email">
+            <input type="tel" class="form-control" name="phone" placeholder="Phone Number" value="@Model.User.Phone">
+            <input type="text" class="form-control" name="address" placeholder="Address" value="@Model.User.Address">
+            <input type="text" class="form-control" name="city" placeholder="City*" required value="@Model.User.City">
+            <input type="text" class="form-control" name="state" placeholder="State*" required value="@Model.User.State">
+            <input type="number" class="form-control" name="zip" placeholder="Zip*" required value="@Model.User.Zip">
+            <br />
+            <label>Membership Level:</label>
+            <select name="selMemberLevel" class="form-control">
+                <option value="Basic" @(Model.User.MyMemberLevel == MembershipLevel.Basic ? "selected" : string.Empty)>Basic (Free)</option>
+                <option value="Premium" @(Model.User.MyMemberLevel == MembershipLevel.Premium ? "selected" : string.Empty)>Premium</option>
+            </select>
+            <br />
+            <label>Password:</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password*" oninput="check(document.getElementById('confpass'))" value="@Model.User.Password">
+            <input type="password" class="form-control" id="confpass" name="confpass" oninput="check(this)" value="@Model.User.Password" placeholder="Confirm Password*">
+            <br />
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Update Account</button>
+            <br />
+        </div>
+        <div class="col-md-6">
+            <h4>Notifications <i class="fa fa-info-circle graylink" data-toggle="tooltip" title="Tell us how you'd like to be notified and we'll send you info about matching offers!" onmouseover="$(this).tooltip('show')"></i></h4>
+            <hr />
+            <div class="row">
+                <div class="col-xs-12 small">
+                    <label>I would like to recieve notification of matching offers by:</label>
+
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="chkEmail" value="email" @((Model.User.MyNotifications & Notifications.Email) != 0 ? "checked" : string.Empty)> Email
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="chkSMS" value="sms" @((Model.User.MyNotifications & Notifications.SMS) != 0 ? "checked" : string.Empty)> SMS
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="chkMobileApp" value="mobile" @((Model.User.MyNotifications & Notifications.MobileApp) != 0 ? "checked" : string.Empty)> MobileApp
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <label>eMatch Mobile App</label><br />
+                    Download the eMatch mobile app to access the <br />"Proximity Search" feature on your mobile device!<br />
+                    <button class="btn btn-info">Get the App</button>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <label>Personalize My View</label><br />
+                    You can choose from a variety of templates, color themes and <br />images to make your member area look the way you want. <br />
+                    <button class="btn btn-success">Personalize My View</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <label>You are currently using eMatch basic membership.</label><br />
+        <a href="#">Learn what extras you will get by upgrading to eMatch Premium membership</a><br />
+        <button class="btn btn-success">Upgrade My Membership</button>
+    </div>
+    <hr />
+    <div class="col-md-12">
+        <br />
+        <label>Cancel Membership.</label><br />
+        <a href="#">If you wish to cancel your membership for any reason click cancel below.</a><br />
+        <button class="btn btn-danger">Cancel My Membership</button>
+    </div>
+</div>
+
+<!-- notification modal -->
+<div class="modal modal-quick fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="updateModalText"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        if ("@ViewBag.WasUpdated" == "True") {
+            $('#updateModalText').html('<i class="glyphicon glyphicon-check"></i> &nbsp;Thank you! Your profile was successfully updated.');
+            $('#updateModal').modal('show');
+
+            window.setTimeout(hide_modal, 2000);
+        }
+    });
+
+    function hide_modal() { $('#updateModal').modal('hide'); }
+
+    function check(input) {
+        if (input.value != document.getElementById('password').value) {
+            input.setCustomValidity('The two passwords must match.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
+</script>

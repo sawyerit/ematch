@@ -1,0 +1,123 @@
+﻿@{
+    Layout = null;
+}
+
+@{
+    var mongoUserRepo = new eMatch.Data.Mongo.MongoUserRepo();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>@ViewBag.Title</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/Public/Components/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="~/Public/Components/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="~/Public/Components/eMatch/css/main.css" rel="stylesheet" />
+    <link href="~/Public/Components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body style="background-color: #333">
+
+    <div class="container">
+
+        <form class="form-signin" role="form" action="/Home/LoginUser" method="post">
+            <h2 class="form-signin-heading">eMatch Login</h2>
+            <div class="msg msg-danger small">@ViewBag.ErrorText</div>
+            <input type="email" name="email" class="form-control" placeholder="Email address" required autofocus>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <label class="checkbox">
+                <input type="checkbox" name="remember-me" value="true"> Remember me
+            </label>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <div class="whitelink i" data-toggle="modal" data-target="#registerModal">Need to create an account?</div>
+        </form>
+    </div>
+    <!-- Register modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="registerModalLabel"><a>Why register?</a></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-register" role="form" action="/Home/CreateAccount" method="post">
+                        <h2 class="form-register-heading">eMatch Account Creation</h2>
+                        <p>
+                            <input type="radio" name="ismerchant" id="typeCustomer" value="false" checked="checked" />
+                            <label for="typeCustomer">Customer</label>
+                            &nbsp;&nbsp;
+                            <input type="radio" name="ismerchant" id="typeMerchant" value="true" />
+                            <label for="typeMerchant">Merchant</label>
+                        </p>
+                        <input type="text" class="form-control" name="firstname" placeholder="First Name" autofocus>
+                        <input type="text" class="form-control" name="lastname" placeholder="Last Name">
+                        <input type="email" class="form-control" name="email" onchange="doesUserNameExistAlready(this)" placeholder="Email address*" required>
+                        <input type="tel" class="form-control" name="phone" placeholder="Phone Number">
+                        <input type="text" class="form-control" name="address" placeholder="Address">
+                        <input type="text" class="form-control" name="city" placeholder="City*" required>
+                        <input type="text" class="form-control" name="state" placeholder="State*" required>
+                        <input type="number" class="form-control" name="zip" placeholder="Zip*" required>
+                        <br />
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password*" required>
+                        <input type="password" class="form-control" id="confpass" name="confpass" oninput="check(this)" placeholder="Confirm Password*" required>
+                        <br />
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Create Account</button>
+                    </form>
+                </div>
+                @*<div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+    <!-- /container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="~/Public/Components/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Public/Components/bootstrap/js/docs.min.js"></script>
+    <script language='javascript' type='text/javascript'>
+        function check(input) {
+            if (input.value != document.getElementById('password').value) {
+                input.setCustomValidity('The two passwords must match.');
+            } else {
+                // input is valid -- reset the error message
+                input.setCustomValidity('');
+            }
+        }
+
+        function doesUserNameExistAlready(input) {
+            $.getJSON("/Home/DoesUserNameExist?userEmailAddress=" + input.value, function (data) {
+                if (data) {
+                    input.setCustomValidity('Oops! An account with that email address already exists.');
+                } else {
+                    input.setCustomValidity('');
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                input.setCustomValidity("We couldn't check your account details at this time. Please try again.");
+            });
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "My Preferences";
+}
+
+<h2>My Profile</h2>
+<br />
+<div class="tab-disappear">
+    <ul class="nav nav-tabs">
+        <li><a href="~/Customer/Offers">My Offers <span class="badge" id="badge-offercount"></span></a></li>
+        <li class="active"><a href="#">My Preferences</a></li>
+        <li><a href="~/Customer/Watch">Watchlist</a></li>
+        <li><a href="~/Customer/Profile">My Account</a></li>
+    </ul>
+</div>
+<div class="nav-disappear ">
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-list"></i> Navigation</a>
+            <ul class="dropdown-menu">
+                <li><a href="~/Customer/Offers">My Offers <span class="badge" id="badge-offercount"></span></a></li>
+                <li class="active"><a href="#">My Preferences</a></li>
+                <li><a href="~/Customer/Watch">Watchlist</a></li>
+                <li><a href="~/Customer/Profile">My Account</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<br />
+<div class="panel panel-default">
+    <div class="panel-body">
+        <span class="fa fa-users"></span>&nbsp; <a href="#">Refer a Friend!</a>  Send your friends to us and recieve a referral bonus!
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2>More preferences = Better deals!</h2>
+        <i class="fa fa-thumbs-up"></i> Like dining out? &nbsp;<i class="fa fa-thumbs-down"></i> But don't like seafood?  Tell us what kind of things you like to get better deals tailored just for you!
+    </div>
+</div>
+<br /><br />
+<div class="row">
+    <div class="col-md-3">
+        <h4>1. Choose a Category</h4>
+        <hr />
+        <div class="btn-group-vertical">
+            @foreach (KeyValuePair<string, List<string>> cat in Model.Categories)
+            {
+                @*<button type="button" class="btn btn-primary btn-xwide @(cat.Key == Model.CurrentCategory ? "active" : string.Empty)">@cat.Key</button>*@
+                <a class="whitelink" href="@Url.Action("Preferences", new { category = cat.Key })" title="@Model.CurrentCategory"><div class="btn btn-primary btn-stdwidth @(cat.Key == Model.CurrentCategory ? "active" : string.Empty)">@cat.Key</div></a>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h4>2. Select your preferences</h4>
+        <hr />
+        <form class="form" role="form" method="post" action="~/Customer/UpdatePreferences">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-folder-open"></i> @Model.CurrentCategory</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="preferences" data-toggle="buttons">
+
+                        <!-- build user pref keywords -->
+                        @if (!Object.Equals(null, Model.CurrentPreference))
+                        {
+                            foreach (string kword in Model.CurrentPreference.Keywords)
+                            {
+                                <label class="btn btn-warning btn-bmargin active" id="chk-label-@kword" data-value="@kword">
+                                    @*<i id="fa-chk-@kword" class="fa fa-thumbs-up"></i>*@
+                                    <input type="checkbox" class="collapse" id="chk-@kword" name="chk-@kword" value="@kword" checked />@kword
+                                </label>
+                            }
+                        }
+
+                        <!-- Build remaining static suggested keywords -->
+                        @foreach (string kword in Model.FilteredCategories[Model.CurrentCategory])
+                        {
+                            <label class="btn btn-default btn-bmargin" id="chk-label-@kword" data-value="@kword">
+                                @*<i id="fa-chk-@kword" class="fa fa-thumbs-down"></i>*@
+                                <input type="checkbox" class="collapse" id="chk-@kword" name="chk-@kword" value="@kword" />@kword
+                            </label>
+                        }
+                        <input type="hidden" name="hidCurrentCategory" value="@Model.CurrentCategory" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-8 form-inline">
+                        <i class="fa fa-info-circle graylink" data-toggle="tooltip" title="Add your own preference and we'll see if we have any matches!" onmouseover="$(this).tooltip('show')"></i> <input type="text" id="add-pref" class="form-control" placeholder="Add preference..."> <div class="btn btn-warning whitelink" id="btnadd-pref" title="Add preference"><i class="fa fa-plus-circle"></i></div>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <input type="submit" class="btn btn-success" value="Save Preferences" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('body').tooltip();
+        //on click of the label, switch the thumb icon
+        WirePreferences();
+
+        $('#btnadd-pref').click(function () {
+            var kword = $('#add-pref').val();
+            if (kword) {
+                var newBtnHtml = "<label class=\"btn btn-warning btn-bmargin active\" id=\"chk-label-" + kword + "\"data-value=\"" + kword + "\">";
+                newBtnHtml += "<input type=\"checkbox\" class=\"collapse\" id=\"chk-" + kword + "\" name=\"chk-" + kword + "\" value=\"" + kword + "\" checked />" + kword + "</label>";
+
+                if ($('#chk-' + kword).length <= 0) {
+                    $('#preferences').append(newBtnHtml);
+                    WirePreferences()
+                    $('#add-pref').val('');
+                }
+            }
+        });
+    });
+
+    function WirePreferences() {
+        $("label[id^=chk-]").off();
+
+        $("label[id^=chk-]").on("click", function () {
+            $(this).toggleClass("btn-default btn-warning");
+        });
+    }
+
+</script>

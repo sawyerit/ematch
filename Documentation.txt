@@ -1,0 +1,26 @@
+Azure Components
+
+-website
+http://ematchconnect.azurewebsites.net/
+
+
+-ftp - recommend using FileZila
+host:ftps://waws-prod-blu-013.ftp.azurewebsites.windows.net
+passive mode: true
+username: ematchconnect\ematch
+pwd:vsnbroxFWRmSh1B5FpbPzPqNKD8QvalwkPnwkPHvtacMAKmudTxYEi1ZjHRi
+
+
+-SendGrid (for sending emails from the website) (not avilable anymore) 
+http://www.sendgrid.com.  Website login and smtp credentials are the same.
+They have a dashboard to view open email and click statistics etc.
+
+smtp server: smtp.sendgrid.net
+username: azure_f25e34426d0d2b9142545e6518d024dd@azure.com
+pwd: YYg6fBsqWGVgf1Z
+
+
+MongoDB
+https://mongolab.com/welcome/
+user: eMatch
+pwd:eMatchM0ng0Rulz#1
